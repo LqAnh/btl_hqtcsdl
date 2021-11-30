@@ -1,0 +1,168 @@
+//users-index
+PUT users-index
+{
+ "mappings" : {
+      "properties" : {
+        "user_balance" : {
+          "type" : "double",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "user_id" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "user_name" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "user_phonenumber" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+}
+
+
+
+
+
+// call-history-index
+PUT call-history-index
+{
+    "mappings" : {
+      "properties" : {
+        "datetime" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "duration" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "history_id" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "source-phone-number" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "target-phone-number" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+-- Query 1
+GET users_index/_search?size=10000
+{
+  "query": {
+    "wildcard": {
+      "user_phonenumber": {
+        "value": "09*"
+      }
+    }
+  }
+}
+
+
+-- Query 2
+GET users_index/_search?size=10000
+{
+  "query": {
+    "match": {
+      "user_name": "Thành"
+    }
+  }
+}
+
+
+-- Query 3
+GET users_index/_search?size=10000
+{
+  "query": {
+    "fuzzy": {
+      "user_name": {
+        "fuzziness": 1,
+        "value": "ank"
+      }
+    }
+  }
+}
+
+
+-- UPDATE
+POST users_index/_update_by_query
+{
+  "script": {
+    "source": "ctx._source.user_phonenumber = '0' + ctx._source.user_phonenumber",
+    "lang": "painless"
+  },
+  "query": {
+    "match": {
+      "user_id": "11"
+    }
+  }
+}
+
+
+-- DELETE
+POST users_index/_delete_by_query
+{
+  "query": {
+    "wildcard": {
+      "user_phonenumber": {
+        "value": "12025*"
+      }
+    }
+  }
+}
