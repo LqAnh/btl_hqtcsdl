@@ -27,7 +27,9 @@ CREATE TABLE `call_history` (
   KEY `call_id_bt_index` (`call_id`),
   KEY `re_id_bt_index` (`receive_id`),
   FULLTEXT KEY `call_id_index` (`call_id`),
-  FULLTEXT KEY `re_id_index` (`receive_id`)
+  FULLTEXT KEY `re_id_index` (`receive_id`),
+  FOREIGN KEY (call_id) REFERENCES Users(id) ON DELETE CASCADE,
+  FOREIGN KEY (receive_id) REFERENCES Users(id ) ON DELETE CASCADE
 );
 
 
